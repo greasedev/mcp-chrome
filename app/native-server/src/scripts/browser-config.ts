@@ -7,6 +7,7 @@ import { HOST_NAME } from './constant';
 export enum BrowserType {
   CHROME = 'chrome',
   CHROMIUM = 'chromium',
+  MISES = 'mises',
 }
 
 export interface BrowserConfig {
@@ -31,6 +32,14 @@ function getUserManifestPathForBrowser(browser: BrowserType): string {
         return path.join(appData, 'Google', 'Chrome', 'NativeMessagingHosts', `${HOST_NAME}.json`);
       case BrowserType.CHROMIUM:
         return path.join(appData, 'Chromium', 'NativeMessagingHosts', `${HOST_NAME}.json`);
+      case BrowserType.MISES:
+        return path.join(
+          appData,
+          'MisesSoftware',
+          'Mises-Browser',
+          'NativeMessagingHosts',
+          `${HOST_NAME}.json`,
+        );
       default:
         return path.join(appData, 'Google', 'Chrome', 'NativeMessagingHosts', `${HOST_NAME}.json`);
     }
@@ -53,6 +62,16 @@ function getUserManifestPathForBrowser(browser: BrowserType): string {
           'Library',
           'Application Support',
           'Chromium',
+          'NativeMessagingHosts',
+          `${HOST_NAME}.json`,
+        );
+      case BrowserType.MISES:
+        return path.join(
+          home,
+          'Library',
+          'Application Support',
+          'MisesSoftware',
+          'Mises-Browser',
           'NativeMessagingHosts',
           `${HOST_NAME}.json`,
         );
@@ -81,6 +100,14 @@ function getUserManifestPathForBrowser(browser: BrowserType): string {
         );
       case BrowserType.CHROMIUM:
         return path.join(home, '.config', 'chromium', 'NativeMessagingHosts', `${HOST_NAME}.json`);
+      case BrowserType.MISES:
+        return path.join(
+          home,
+          '.config',
+          'mises-browser',
+          'NativeMessagingHosts',
+          `${HOST_NAME}.json`,
+        );
       default:
         return path.join(
           home,
@@ -112,6 +139,14 @@ function getSystemManifestPathForBrowser(browser: BrowserType): string {
         );
       case BrowserType.CHROMIUM:
         return path.join(programFiles, 'Chromium', 'NativeMessagingHosts', `${HOST_NAME}.json`);
+      case BrowserType.MISES:
+        return path.join(
+          programFiles,
+          'MisesSoftware',
+          'Mises-Browser',
+          'NativeMessagingHosts',
+          `${HOST_NAME}.json`,
+        );
       default:
         return path.join(
           programFiles,
@@ -139,6 +174,15 @@ function getSystemManifestPathForBrowser(browser: BrowserType): string {
           'NativeMessagingHosts',
           `${HOST_NAME}.json`,
         );
+      case BrowserType.MISES:
+        return path.join(
+          '/Library',
+          'Application Support',
+          'MisesSoftware',
+          'Mises-Browser',
+          'NativeMessagingHosts',
+          `${HOST_NAME}.json`,
+        );
       default:
         return path.join(
           '/Library',
@@ -155,6 +199,8 @@ function getSystemManifestPathForBrowser(browser: BrowserType): string {
         return path.join('/etc', 'opt', 'chrome', 'native-messaging-hosts', `${HOST_NAME}.json`);
       case BrowserType.CHROMIUM:
         return path.join('/etc', 'chromium', 'native-messaging-hosts', `${HOST_NAME}.json`);
+      case BrowserType.MISES:
+        return path.join('/etc', 'mises-browser', 'native-messaging-hosts', `${HOST_NAME}.json`);
       default:
         return path.join('/etc', 'opt', 'chrome', 'native-messaging-hosts', `${HOST_NAME}.json`);
     }
@@ -175,6 +221,10 @@ function getRegistryKeys(browser: BrowserType): { user: string; system: string }
     [BrowserType.CHROMIUM]: {
       user: `HKCU\\Software\\Chromium\\NativeMessagingHosts\\${HOST_NAME}`,
       system: `HKLM\\Software\\Chromium\\NativeMessagingHosts\\${HOST_NAME}`,
+    },
+    [BrowserType.MISES]: {
+      user: `HKCU\\Software\\MisesSoftware\\Mises-Browser\\NativeMessagingHosts\\${HOST_NAME}`,
+      system: `HKLM\\Software\\MisesSoftware\\Mises-Browser\\NativeMessagingHosts\\${HOST_NAME}`,
     },
   };
 
@@ -209,6 +259,7 @@ export function detectInstalledBrowsers(): BrowserType[] {
     const browsers: Array<{ type: BrowserType; registryPath: string }> = [
       { type: BrowserType.CHROME, registryPath: 'HKLM\\SOFTWARE\\Google\\Chrome' },
       { type: BrowserType.CHROMIUM, registryPath: 'HKLM\\SOFTWARE\\Chromium' },
+      { type: BrowserType.MISES, registryPath: 'HKLM\\SOFTWARE\\MisesSoftware\\Mises-Browser' },
     ];
 
     for (const browser of browsers) {
@@ -224,6 +275,7 @@ export function detectInstalledBrowsers(): BrowserType[] {
     const browsers: Array<{ type: BrowserType; appPath: string }> = [
       { type: BrowserType.CHROME, appPath: '/Applications/Google Chrome.app' },
       { type: BrowserType.CHROMIUM, appPath: '/Applications/Chromium.app' },
+      { type: BrowserType.MISES, appPath: '/Applications/Mises Browser.app' },
     ];
 
     for (const browser of browsers) {
@@ -236,6 +288,7 @@ export function detectInstalledBrowsers(): BrowserType[] {
     const browsers: Array<{ type: BrowserType; commands: string[] }> = [
       { type: BrowserType.CHROME, commands: ['google-chrome', 'google-chrome-stable'] },
       { type: BrowserType.CHROMIUM, commands: ['chromium', 'chromium-browser'] },
+      { type: BrowserType.MISES, commands: ['mises-browser', 'mises'] },
     ];
 
     for (const browser of browsers) {
