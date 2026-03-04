@@ -14,8 +14,17 @@ import { BrowserType, parseBrowserType, detectInstalledBrowsers } from './script
 import { runDoctor } from './scripts/doctor';
 import { runReport } from './scripts/report';
 
+// 读取版本：优先从上级目录（npm 安装），否则从当前目录（独立安装）
+function getVersion(): string {
+  try {
+    return require('../package.json').version;
+  } catch {
+    return require('./package.json').version;
+  }
+}
+
 program
-  .version(require('../package.json').version)
+  .version(getVersion())
   .description('Mcp Chrome Bridge - Local service for communicating with Chrome extension');
 
 // Register Native Messaging host
