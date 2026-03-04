@@ -140,7 +140,7 @@ export class Server {
           const extensionResponse = await this.nativeHost.sendRequestToExtensionAndWait(
             request.query,
             'process_data',
-            TIMEOUTS.EXTENSION_REQUEST_TIMEOUT,
+            TIMEOUTS.PROCESS_DATA_TIMEOUT,
           );
           return reply.status(HTTP_STATUS.OK).send({ status: 'success', data: extensionResponse });
         } catch (error: unknown) {
